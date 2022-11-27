@@ -1,16 +1,10 @@
 import datetime
 import time
 
+from screen_buffer import ScreenBuffer
+
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
     ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
     GREY = '\033[38;5;235m'
     WHITE = '\033[38;5;255m'
 
@@ -35,7 +29,7 @@ FACE = [
     ['D',	'I',	'X',	'_',	'*',	'*',	'*',	'*',	'_',	'S',],
 ]
 
-C_EST =         [[(0,0), (4,0)]]
+IL_EST =        [[(0,0), (4,0)]]
 
 # HOUR:
 HEURES =        [[(1,5), (6,5)]]
@@ -69,8 +63,6 @@ TROIS_QUARTS =      [[(0,6), (4,6)], [(3,8), (8,8)]]
 MOINS_DIX =         MOINS + DIX
 MOINS_CINQ =        MOINS + CINQ
 
-
-
 FULL_HOURS = [
     MINUIT, UNE_HEURE, DEUX_HEURES, TROIS_HEURES, QUATRE_HEURES, CINQ_HEURES, 
     SIX_HEURES, SEPT_HEURES, HUIT_HEURES, DIX_HEURES, ONZE_HEURES,
@@ -87,46 +79,6 @@ def minute_remainder(val):
         return []
     return [[(4, 9), (val+3, 9)]]
 
-def init_led_mask(face):
-    h = len(face)
-    w = len(face[0])
-
-    return [
-        [False for _ in range(h)] for _ in range(w)
-    ]
-
-
-def sub_hour():
-    return [
-        'cinq',
-        'dix',
-        'et quart',
-        'vingt',
-        'vingt cinq',
-        'et demi',
-        'moins vingt cinq',
-        'moins vingt',
-        'trois quarts',
-        'moins dix',
-        'moins cinq'
-    ]
-
-def hour():
-    [
-        'minuit',
-        'une heure',
-        'deux heures',
-        'trois heures',
-        'quatre heures',
-        'cinq heures',
-        'six heures',
-        'sept heures',
-        'huit heures',
-        'neuf heures',
-        'dix heures',
-        'onze heures',
-        'midi',
-    ]
 
 def print_face(face, mask):
     for row_i, row in enumerate(face):
@@ -134,29 +86,8 @@ def print_face(face, mask):
             print(bcolors.white(l) if mask[row_i][l_i] else bcolors.grey(l), end='')
         print('')
 
-def activate_mask(mask, x, y):
-    mask[y][x] = True
 
-def mask_draw_line(mask, line):
-    [(x, y), (x_max, y_max)] = line
-    activate_mask(mask, x, y)
-    while x != x_max or y != y_max:
-        x = min(x+1, x_max)
-        y = min(y+1, y_max)
-        activate_mask(mask, x, y)
-
-def mask_draw_lines(mask, lines):
-    for line in lines:
-        mask_draw_line(mask, line)
-
-def fill_gaps(face):
-
-    for r_i, r in enumerate(face):
-        for l_i, l in enumerate(r):
-            if l == '_':
-                pass
-
-def display_time(t):
+def get_lines_for_time(t):
     minute = int((t.minute - t.minute%5)/5)
     hour_bump = 1 if minute in [7, 8, 10, 11] else 0
         
@@ -165,20 +96,27 @@ def display_time(t):
 
     hour_lines = FULL_HOURS[hour]
     sub_hour_lines = FULL_SUBHOURS[minute]
+    sub_5_minutes = minute_remainder(t.minute%5)
 
+    return IL_EST + hour_lines + sub_hour_lines + sub_5_minutes
+
+
+def display_time(t):
     print(f'{t.hour}:{t.minute}')
 
-    face = FACE
-    mask = init_led_mask(face)
-    mask_draw_lines(mask, C_EST + hour_lines + sub_hour_lines + minute_remainder(t.minute%5))
+    buffer = ScreenBuffer(len(FACE), len(FACE[0]), False)
+    buffer.draw_lines(get_lines_for_time(t), True)
 
-    print_face(face, mask)
+    print_face(FACE, buffer.buffer)
+
 
 def show(time_str):
     t = datetime.datetime.strptime(time_str, '%H:%M')
     display_time(t)
 
+
 def day_loop():
+    """ Display all possible time values """
     t = datetime.datetime.strptime('0:0', '%H:%M')
     
     display_time(t)
