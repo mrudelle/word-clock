@@ -1,7 +1,8 @@
 import neopixel
+import machine
 
 # 32 LED strip connected to X8.
-p = machine.Pin.board.X8
+p = machine.Pin(12, machine.Pin.OUT)
 n = neopixel.NeoPixel(p, 32)
 
 # Draw a red gradient.
@@ -24,10 +25,11 @@ class LEDMatrix:
 
         for y, r in enumerate(data):
             for x, l in enumerate(r):
-                self.n[led_index(x, y)] = l
+                # print(f'({x},{y}) -> {self.led_index(x, y)}')
+                self.n[self.led_index(x, y)] = l
         
         self.n.write()
     
     def led_index(self, x, y):
         # Horizontal lines starting top left
-        return y * self.w + (x if y%2 == 0 else self.h-(x+1))
+        return y * self.w + (x if y%2 == 0 else self.w-(x+1))
