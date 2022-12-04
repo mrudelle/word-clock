@@ -4,9 +4,15 @@ import utime
 from led_matrix import LEDMatrix
 from screen_buffer import ScreenBuffer
 from word_clock import get_lines_for_time
+from light_sensor import BH1750_I2C
 
 lmatrix = LEDMatrix(10, 10, 12)
 buff = ScreenBuffer(10, 10)
+
+i2c_bus = machine.I2C(0, scl=machine.Pin(17), sda=machine.Pin(16))
+l_sens = BH1750_I2C(i2c_bus)
+
+print(i2c_bus.scan())
 
 
 def amps_test():
