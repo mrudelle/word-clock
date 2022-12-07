@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "serial://dev/tty.usbmodem14101",
+			"uri": "serial:///dev/tty.usbmodem14101/"
+		}
+	],
+	"settings": {}
+}

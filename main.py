@@ -12,6 +12,8 @@ buff = ScreenBuffer(10, 10)
 i2c_bus = machine.I2C(0, scl=machine.Pin(17), sda=machine.Pin(16))
 l_sens = BH1750_I2C(i2c_bus)
 
+dcf = machine.Pin(11, machine.Pin.IN) # No pull-up for now
+
 print(i2c_bus.scan())
 
 
@@ -29,19 +31,20 @@ def amps_test():
             x = 0
 
 
-h = 0
-m = 0
+def hour_test():
+    h = 0
+    m = 0
 
-lmatrix.brightness = 0.1
+    lmatrix.brightness = 1.0
 
-while True:
-    buff.clear()
-    lines = get_lines_for_time(h, m)
-    buff.draw_lines(lines, (12, 100, 34))
-    lmatrix.write(buff.buffer)
-    utime.sleep(1)
+    while True:
+        buff.clear()
+        lines = get_lines_for_time(h, m)
+        buff.draw_lines(lines, (12, 100, 34))
+        lmatrix.write(buff.buffer)
+        utime.sleep(1)
 
-    m = m+1
-    if m == 60:
-        h = (h+1) % 24
-        m = 0
+        m = m+1
+        if m == 60:
+            h = (h+1) % 24
+            m = 0
