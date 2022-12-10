@@ -64,9 +64,10 @@ class DCF77:
 
         for s_i in range(59):
 
-            record_end = ticks_add(record_start, 1000)
+            record_start = ticks_add(record_start, 300)
+            record_end = ticks_add(record_start, 300)
             seconds += [self.count_until(record_start, record_end, resolution_ms)]
-            record_start = record_end
+            record_start = ticks_add(record_end, 400)
             
             print(f'    {s_i}: {seconds[s_i]}')
         
@@ -81,6 +82,7 @@ class DCF77:
             for i, b in enumerate(bin):
                 if b:
                     res += DCF77_COEF[i]
+            return res
         
         def check_parity(bin):
             res = 0
@@ -96,13 +98,13 @@ class DCF77:
 
         d_s = data_bin[20]
 
-        minutes = decode(data_bin[21:28])
-        hours = decode(data_bin[29:35])
+        minutes = decode_int(data_bin[21:28])
+        hours = decode_int(data_bin[29:35])
 
-        day = decode(data_bin[36:42])
-        weekday = decode(data_bin[42:45])
-        month = decode(data_bin[45:50])
-        year = decode(data_bin[50:58]) + 2000  # safe bet
+        day = decode_int(data_bin[36:42])
+        weekday = decode_int(data_bin[42:45])
+        month = decode_int(data_bin[45:50])
+        year = decode_int(data_bin[50:58]) + 2000  # safe bet
 
         m_check = check_parity(data_bin[21:29])
         h_check = check_parity(data_bin[29:36])
@@ -117,12 +119,16 @@ class DCF77:
         sync_tick = self.wait_for_sync()
         print('got a sync second')
         seconds = self.record_one_minute(sync_tick, resolution_ms=5)
-        (checks, year, month, day, weekday, hours, minutes) = self.parse_minute(seconds, threshold=30)
+        (checks, year, month, day, weekday, hours, minutes) = self.parse_minute(seconds, threshold=25)
 
         if False in checks:
             print(f'Extended checks failed: {checks}')
         
         if False in checks[0:2]:
-            print(f'Failed time checks')
+            print(f'Failed time checks, {hours}:{minutes} {day}.{month}.{year} ({weekday})')
         else:
             print(f'Time: {hours}:{minutes} {day}.{month}.{year} ({weekday})')
+
+
+if __name__ == "__main__":
+    print(DCF77(11).get_time())
