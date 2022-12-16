@@ -21,6 +21,7 @@ class DCF77:
         """
 
         check_period_ms = 50
+        first_signal_acquired = False
         last_chirp = ticks_ms()
         next_check = ticks_add(last_chirp, check_period_ms)
 
@@ -29,11 +30,12 @@ class DCF77:
             
             if self.pin.value() == 1:
                 last_chirp = ticks_ms()
+                first_signal_acquired = True
                 print('chirp')
             else:
                 print('.', end='')
             
-            if ticks_diff(ticks_ms(), last_chirp) > 1000:
+            if ticks_diff(ticks_ms(), last_chirp) > 1000 and first_signal_acquired:
                 return ticks_ms()
             
             next_check = ticks_add(next_check, check_period_ms)
@@ -131,4 +133,6 @@ class DCF77:
 
 
 if __name__ == "__main__":
-    print(DCF77(11).get_time())
+    
+    while True:
+        DCF77(11).get_time()
