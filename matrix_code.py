@@ -38,24 +38,24 @@ def matrix_code(w=10, h=10, leds_pin=12, frequency_ms=5):
 
     while(True):
 
-        # maybe add letter
-        letters.extend(new_letters(w, h))
-
         # fade screen
         buff.filter(rgb_scale_offset((0, 0.9, 0), (0,0,0)))
+        
+        # prune letters
+        letters = list(filter(lambda letter: letter.y < h, letters))
         
         # draw letters
         draw_letters(letters, buff)
 
+        # render screen
+        lmatrix.write(buff.buffer)
+
         # shift letters
         for i, _ in enumerate(letters):
             letters[i] = shift_letter(letters[i], frequency_ms=frequency_ms)
-        
-        # prune letters
-        letters = list(filter(lambda letter: letter.y < h, letters))
 
-        # render screen
-        lmatrix.write(buff.buffer)
+        # maybe add letter
+        letters.extend(new_letters(w, h))
 
         # sleep until next frame
         next_frame = ticks_add(next_frame, frequency_ms) 
