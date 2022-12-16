@@ -11,14 +11,14 @@ def generate_new_letters():
 
 def draw_letters(letters, buff: ScreenBuffer):
     for letter in letters:
-        buff.draw_pixel(int(letter.x), int(letter.y), (255, 150, 150))
+        buff.draw_pixel(int(letter.x), int(letter.y), (100, 250, 100))
 
 def shift_letter(letter: Letter, frequency_ms):
     return Letter(letter.x, letter.y + frequency_ms / letter.pace, letter.pace)
 
 def new_letters(w, h):
     if random.randint(0, 1000) < 300:
-        return [Letter(random.randint(0, w-1), random.randint(0, h-1), random.randint(5, 50))]
+        return [Letter(random.randint(0, w-1), random.randint(0, int(h/2)), random.randint(5, 50))]
     else: 
         return []
 
