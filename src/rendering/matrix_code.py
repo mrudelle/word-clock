@@ -1,8 +1,8 @@
 import random
 from collections import namedtuple
 from time import ticks_ms, ticks_add, ticks_diff, sleep_ms
-from led_matrix import LEDMatrix
-from screen_buffer import ScreenBuffer, rgb_scale_offset
+from src.board.led_matrix import LEDMatrix
+from src.rendering.screen_buffer import ScreenBuffer, rgb_scale_offset
 
 Letter = namedtuple('Letter', 'x y pace')
 

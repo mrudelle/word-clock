@@ -1,10 +1,10 @@
 import machine
 import utime
 
-from led_matrix import LEDMatrix
-from screen_buffer import ScreenBuffer, scale_rgb_filter
-from word_clock import get_lines_for_time
-from light_sensor import BH1750_I2C
+from src.board.led_matrix import LEDMatrix
+from src.rendering.screen_buffer import ScreenBuffer, scale_rgb_filter
+from src.clock_face.word_clock import get_lines_for_time
+from src.board.light_sensor import BH1750_I2C
 
 lmatrix = LEDMatrix(10, 10, 12)
 buff = ScreenBuffer(10, 10)

@@ -1,6 +1,7 @@
-from screen_buffer import ScreenBuffer
+from src.rendering.screen_buffer import ScreenBuffer
 import datetime
-from word_clock import get_lines_for_time, FACE
+from src.clock_face.word_clock import get_lines_for_time, FACE
+import time
 
 class bcolors:
     ENDC = '\033[0m'
