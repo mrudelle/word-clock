@@ -22,7 +22,7 @@ def new_letters(w, h):
     else: 
         return []
 
-def matrix_code(w=10, h=10, leds_pin=12, frequency_ms=5):
+def matrix_code(w=10, h=10, leds_pin=28, frequency_ms=5):
 
     lmatrix = LEDMatrix(w, h, leds_pin)
     lmatrix.brightness = .3
