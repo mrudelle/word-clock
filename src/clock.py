@@ -8,6 +8,7 @@ from src.rendering.screen_buffer import ScreenBuffer, scale_rgb_filter
 from src.clock_face.word_clock import get_lines_for_time
 from src.board.light_sensor import BH1750_I2C
 from src.board.pcf8523 import PCF8523
+from src.utils.timezone_light import utc_to_cet
 
 i2c_bus = machine.I2C(1, scl=machine.Pin(27), sda=machine.Pin(26))
 
@@ -42,9 +43,9 @@ class Clock:
 
         while True:
 
-            (_, _, _, hours, minutes, seconds, _, _) = time.localtime(self.rtc_module.datetime)
-
-            # TODO: adjust for DST
+            (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
+                utc_to_cet(self.rtc_module.datetime)
+            )
             
             lines = get_lines_for_time(hours, minutes)
             self.buff.clear()
