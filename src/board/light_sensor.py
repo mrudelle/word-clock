@@ -1,4 +1,5 @@
 import utime
+import uasyncio
 
 class BH1750_I2C:
     """ Taken from https://github.com/PinkInk/upylib/tree/master/bh1750 """
@@ -50,3 +51,19 @@ class BH1750_I2C:
     
     def lux(self):
         return self.luminance(BH1750_I2C.ONCE_HIRES_2)
+    
+    async def async_luminance(self, mode):
+        # continuous modes
+        if mode & 0x10 and mode != self.mode:
+            self.set_mode(mode)
+        # one shot modes
+        if mode & 0x20:
+            self.set_mode(mode)
+        # earlier measurements return previous reading
+        await uasyncio.sleep_ms(24 if mode in (BH1750_I2C.ONCE_LOWRES, BH1750_I2C.CONT_LOWRES) else 180)
+        data = self.bus.readfrom(self.addr, 2)
+        factor = 2.0 if mode in (BH1750_I2C.CONT_HIRES_2, BH1750_I2C.ONCE_HIRES_2) else 1.0
+        return (data[0]<<8 | data[1]) / (1.2 * factor)
+    
+    async def async_lux(self):
+        return await self.async_luminance(BH1750_I2C.ONCE_HIRES_2)

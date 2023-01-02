@@ -9,6 +9,7 @@ from src.clock_face.word_clock import get_lines_for_time
 from src.board.light_sensor import BH1750_I2C
 from src.board.pcf8523 import PCF8523
 from src.utils.timezone_light import utc_to_cet
+from src.rendering.matrix_code import MatrixCode
 
 i2c_bus = machine.I2C(1, scl=machine.Pin(27), sda=machine.Pin(26))
 
@@ -29,15 +30,20 @@ class Clock:
         self.rtc_module = PCF8523(i2c_bus)
         self.light_module = BH1750_I2C(i2c_bus)
 
+        self.w = w
+        self.h = h
+
+        self.fps = REFRESH_RATE
+
     async def refresh_screen(self):
 
         while True:
             
-            weight = REFRESH_RATE * 2
+            weight = self.fps * 2
             self.lmatrix.brightness = (self.lmatrix.brightness * weight + self.target_brightness) / (weight + 1)
             self.lmatrix.write(self.buff.buffer)
 
-            await uasyncio.sleep(1/REFRESH_RATE)
+            await uasyncio.sleep(1/self.fps)
 
     async def refresh_time(self):
 
@@ -46,6 +52,13 @@ class Clock:
             (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
                 utc_to_cet(self.rtc_module.datetime)
             )
+
+            # comment that part if you don't want an animation at 10pm
+            if hours == 22 and minutes == 0:
+                await self.matrix_code(duration_s=60)
+                (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
+                    utc_to_cet(self.rtc_module.datetime)
+                )
             
             lines = get_lines_for_time(hours, minutes)
             self.buff.clear()
@@ -53,24 +66,42 @@ class Clock:
 
             # wait until next minute to refresh
             await uasyncio.sleep(61-seconds)
+    
+    async def matrix_code(self, duration_s=60):
 
-    def get_luminosity_target(self):
-        lux = self.light_module.lux()
+        end = time.ticks_add(time.ticks_ms(), duration_s * 1000)
+        m_code = MatrixCode(self.w, self.h, self.buff)
+        frequency_ms = 5
+        self.fps = 1000/frequency_ms
+
+        while time.ticks_diff(end, time.ticks_ms()) > 0:
+            
+            m_code.refresh(frequency_ms)
+
+            await uasyncio.sleep(frequency_ms/1000)
+        
+        self.fps = REFRESH_RATE
+
+    async def get_luminosity_target(self):
+        lux = await self.light_module.async_lux()
         return min(1.0, max(0.01, math.log2(lux+1) / LUMINOSITY_COEF))
 
     async def sample_brightness(self):
 
         while True:
 
-            self.target_brightness = self.get_luminosity_target()
+            self.target_brightness = await self.get_luminosity_target()
 
             await uasyncio.sleep(1)
 
     async def main(self):
 
         uasyncio.create_task(self.refresh_screen())
-        uasyncio.create_task(self.refresh_time())
         uasyncio.create_task(self.sample_brightness())
+
+        await self.matrix_code(duration_s=5)
+
+        uasyncio.create_task(self.refresh_time())
 
         while True:
             await uasyncio.sleep(1)

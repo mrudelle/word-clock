@@ -6,9 +6,6 @@ from src.rendering.screen_buffer import ScreenBuffer, rgb_scale_offset
 
 Letter = namedtuple('Letter', 'x y pace')
 
-def generate_new_letters():
-    pass
-
 def draw_letters(letters, buff: ScreenBuffer):
     for letter in letters:
         buff.draw_pixel(int(letter.x), int(letter.y), (100, 250, 100))
@@ -62,4 +59,53 @@ def matrix_code(w=10, h=10, leds_pin=28, frequency_ms=5):
         sleep_ms(ticks_diff(next_frame, ticks_ms()))
 
 
-matrix_code()
+LETTER_COLOR = (100, 250, 100)
+
+
+class MatrixCode:
+
+    def __init__(self, w, h, buffer) -> None:
+        self.letters = [
+            Letter(0, 0, 30),
+        ]
+        self.buff = buffer
+        self.buff.clear()
+        self.w = w
+        self.h = h
+    
+    def new_letters(self):
+        if random.randint(0, 1000) < 300:
+            return [
+                Letter(
+                    random.randint(0, self.w-1), 
+                    random.randint(0, int(self.h/2)), 
+                    random.randint(5, 50)
+                    )
+                ]
+        else: 
+            return []
+    
+
+    def shift_letter(self, letter: Letter, frequency_ms):
+        return Letter(letter.x, letter.y + frequency_ms / letter.pace, letter.pace)
+    
+    def draw_letters(self):
+        for letter in self.letters:
+            self.buff.draw_pixel(int(letter.x), int(letter.y), LETTER_COLOR)
+    
+    def refresh(self, interval_ms):
+        # fade screen
+        self.buff.filter(rgb_scale_offset((0, 0.9, 0), (0,0,0)))
+        
+        # prune letters
+        self.letters = list(filter(lambda letter: letter.y < self.h, self.letters))
+        
+        # draw letters
+        self.draw_letters()
+
+        # shift letters
+        for i, _ in enumerate(self.letters):
+            self.letters[i] = self.shift_letter(self.letters[i], frequency_ms=interval_ms)
+
+        # maybe add letter
+        self.letters.extend(self.new_letters())
