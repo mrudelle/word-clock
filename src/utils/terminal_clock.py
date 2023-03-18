@@ -1,6 +1,6 @@
 from src.rendering.screen_buffer import ScreenBuffer
 import datetime
-from src.clock_face.word_clock import get_lines_for_time, FACE
+from src.clock_face.word_clock_v2 import get_lines_for_time, FACE
 import time
 
 class bcolors:
@@ -46,26 +46,8 @@ def day_loop():
     display_time(t)
 
     while t.day < 2:
-        time.sleep(.2)
+        time.sleep(.1)
         t = t + datetime.timedelta(minutes=1)
-        print("\033[F"*11, end='')
+        print("\033[F"*(len(FACE) + 1), end='')
         display_time(t)
 
-def main():
-    t = datetime.datetime.now()
-    display_time(t)
-
-    # times that violate the rules
-
-    # minuit trois quarts: shares the T
-    #show('0:46')
-    
-    # une heure moins ... : une and moins form one word
-    #show('12:37')
-    #show('12:42')
-    #show('12:57')
-
-    # day_loop()
-
-if __name__ == '__main__':
-    main()
