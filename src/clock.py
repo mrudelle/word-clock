@@ -5,7 +5,6 @@ import math
 
 from src.board.led_matrix import LEDMatrix
 from src.rendering.screen_buffer import ScreenBuffer, scale_rgb_filter
-from src.clock_face.word_clock import get_lines_for_time
 from src.board.light_sensor import BH1750_I2C
 from src.board.pcf8523 import PCF8523
 from src.utils.timezone_light import utc_to_cet
@@ -19,7 +18,10 @@ LUMINOSITY_COEF = 40
 
 class Clock:
 
-    def __init__(self, i2c_bus, w=10, h=10, led_strip_pin=28) -> None:
+    def __init__(self, i2c_bus, clock_face, led_strip_pin=28) -> None:
+
+        w = len(clock_face.FACE[0])
+        h = len(clock_face.FACE)
 
         self.lmatrix = LEDMatrix(w, h, led_strip_pin)
         self.buff = ScreenBuffer(w, h)
@@ -27,13 +29,15 @@ class Clock:
         self.lmatrix.brightness = 0.2
         self.target_brightness = 0.2
 
-        self.rtc_module = PCF8523(i2c_bus)
-        self.light_module = BH1750_I2C(i2c_bus)
+        #self.rtc_module = PCF8523(i2c_bus)
+        #self.light_module = BH1750_I2C(i2c_bus)
 
         self.w = w
         self.h = h
 
         self.fps = REFRESH_RATE
+
+        self.clock_face = clock_face
 
     async def refresh_screen(self):
 
@@ -49,6 +53,8 @@ class Clock:
 
         while True:
 
+            print(self.rtc_module.datetime)
+
             (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
                 utc_to_cet(self.rtc_module.datetime)
             )
@@ -60,7 +66,7 @@ class Clock:
                     utc_to_cet(self.rtc_module.datetime)
                 )
             
-            lines = get_lines_for_time(hours, minutes)
+            lines = self.clock_face.get_lines_for_time(hours, minutes)
             self.buff.clear()
             self.buff.draw_lines(lines, CLOCK_COLOR)
 
@@ -108,3 +114,33 @@ class Clock:
     
     def run(self):
         uasyncio.run(self.main())
+
+    async def debug(self):
+
+        m = 0
+        h = 0
+        
+        while True:
+            lines = self.clock_face.get_lines_for_time(h, m)
+            self.buff.clear()
+            self.buff.draw_lines(lines, CLOCK_COLOR)
+
+            m = m+1
+            if m > 59:
+                h = (h+1)%24
+                m = 0
+
+            await uasyncio.sleep(.3)
+
+    async def debug_task(self):
+
+        uasyncio.create_task(self.refresh_screen())
+        #uasyncio.create_task(self.sample_brightness())
+        uasyncio.create_task(self.debug())
+
+        while True:
+            await uasyncio.sleep(1)
+
+    def run_debug(self):
+        uasyncio.run(self.debug_task())
+
