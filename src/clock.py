@@ -13,7 +13,7 @@ from src.rendering.matrix_code import MatrixCode
 i2c_bus = machine.I2C(1, scl=machine.Pin(27), sda=machine.Pin(26))
 
 REFRESH_RATE = 5  # FPS
-CLOCK_COLOR = (255, 255, 255)
+CLOCK_COLOR = (211, 211, 255)
 LUMINOSITY_COEF = 40
 
 class Clock:
@@ -29,8 +29,8 @@ class Clock:
         self.lmatrix.brightness = 0.2
         self.target_brightness = 0.2
 
-        #self.rtc_module = PCF8523(i2c_bus)
-        #self.light_module = BH1750_I2C(i2c_bus)
+        self.rtc_module = PCF8523(i2c_bus)
+        self.light_module = BH1750_I2C(i2c_bus)
 
         self.w = w
         self.h = h
