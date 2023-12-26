@@ -2,6 +2,14 @@
     "folders": [
         {
             "path": "."
+        },
+        {
+            "name": "serial://dev/tty.usbmodem11201",
+            "uri": "serial://%2fdev%2ftty.usbmodem11201/"
+        },
+        {
+            "name": "serial://dev/tty.usbmodem11201",
+            "uri": "serial://%2fdev%2ftty.usbmodem11201/"
         }
     ]
 }

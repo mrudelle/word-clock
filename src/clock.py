@@ -7,6 +7,7 @@ from src.board.led_matrix import LEDMatrix
 from src.rendering.screen_buffer import ScreenBuffer, scale_rgb_filter
 from src.board.light_sensor import BH1750_I2C
 from src.board.pcf8523 import PCF8523
+from src.board.ds3231 import DS3231
 from src.utils.timezone_light import utc_to_cet
 from src.rendering.matrix_code import MatrixCode
 
@@ -29,7 +30,8 @@ class Clock:
         self.lmatrix.brightness = 0.2
         self.target_brightness = 0.2
 
-        self.rtc_module = PCF8523(i2c_bus)
+        # self.rtc_module = PCF8523(i2c_bus)
+        self.rtc_module = DS3231(i2c_bus)
         self.light_module = BH1750_I2C(i2c_bus)
 
         self.w = w
@@ -53,17 +55,20 @@ class Clock:
 
         while True:
 
-            print(self.rtc_module.datetime)
+            # print(self.rtc_module.datetime)
+            print(self.rtc_module.get_time())
 
+            # with PCF8523 module:
+            # (_, _, _, hours, minutes, seconds, _, _) = time.localtime(utc_to_cet(self.rtc_module.datetime))
             (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
-                utc_to_cet(self.rtc_module.datetime)
+                utc_to_cet(time.mktime(self.rtc_module.get_time()))
             )
 
             # comment that part if you don't want an animation at 10pm
             if hours == 22 and minutes == 0:
                 await self.matrix_code(duration_s=60)
                 (_, _, _, hours, minutes, seconds, _, _) = time.localtime(
-                    utc_to_cet(self.rtc_module.datetime)
+                    utc_to_cet(time.mktime(self.rtc_module.get_time()))
                 )
             
             lines = self.clock_face.get_lines_for_time(hours, minutes)
