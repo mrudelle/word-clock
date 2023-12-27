@@ -1,5 +1,19 @@
-# Wordclock program running on micropython
-----------
+# Modular word-clock software for micropython
+
+![Word clock](doc/img/clock-face-fr.jpeg)
+
+* Support the addition of new clock faces (other dimensions, language, layout,...)
+* Compatible with neopixel led strips
+* Light sensor based luminosity adjustment
+* Create your own animations
+* Asynchronous implementation
+* USB-C power
+
+## Sample wiring with Pi Pico
+
+![Word clock sample schematic with raspberry pi pico](doc/img/schematics-pi-pico.png)
+![Word clock wiring with raspberry pi pico](doc/img/back.jpeg)
+![Word clock usb socket](doc/img/back-close-up.jpeg)
 
 ## Usage
 
