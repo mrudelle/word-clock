@@ -25,12 +25,15 @@ pip3 install -r requirements-dev.txt
 ```
 
 ### Install code on rpi
+Plug Raspbery Pi via USB,
 
 ```
 mpremote cp -r src :
 mpremote cp boot.py :.
 mpremote cp main.py :.
 ```
+
+Unplug and plug the clock to restart it.
 
 ### Set time
 
