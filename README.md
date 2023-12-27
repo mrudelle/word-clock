@@ -2,12 +2,11 @@
 
 ![Word clock](doc/img/clock-face-fr.jpeg)
 
-* Support the addition of new clock faces (other dimensions, language, layout,...)
+* Support the addition of new clock faces (other dimensions, language, layout,...). see `src/clock_face`
 * Compatible with neopixel led strips
 * Light sensor based luminosity adjustment
-* Create your own animations
-* Asynchronous implementation
-* USB-C power
+* Create your own animations. see `src/rendering`
+* Asynchronous implementation with asyncio
 
 ## Sample wiring with Pi Pico
 
@@ -49,3 +48,14 @@ mpremote run src/utils/set_date_time.py
 # run the main loop to catch any error
 mpremote run main.py 
 ```
+
+## Build
+
+TODO: document build and release CAD files (Frame & PCB)
+
+* Glass front with die-cut sticker on the back
+* USB-C powered
+* Frame laser cut in 4mm MDF
+* Custom PCB board to wire the LED matrix
+
+Font used for the clock face: [wordclock-stencil-mono](https://github.com/mrudelle/wordclock-stencil-mono)
