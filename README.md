@@ -54,7 +54,7 @@ mpremote run main.py
 
 ## Build
 
-TODO: document build and release CAD files (Frame & PCB)
+See [/hardware](/hardware/) for build infos and files
 
 * Glass front with die-cut sticker on the back
 * USB-C powered

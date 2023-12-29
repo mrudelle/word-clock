@@ -36,7 +36,7 @@ Then the back plate, with LED taped on it, with the PCB jumpers soldered to recr
 
 On the back of that back plate goes all the electronics. Hidden by a rim that is screwed to the bolts and holds everything together. I painted the visible parts black to hide them a bit more when looking from the side.
 
-![Wordclock v2 back plate with electornics](/doc/img/back.jpg)
+![Wordclock v2 back plate with electornics](/doc/img/back.jpeg)
 
 
 
