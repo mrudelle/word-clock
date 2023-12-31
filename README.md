@@ -1,6 +1,6 @@
 # Modular word-clock software for micropython
 
-![Word clock](doc/img/clock-face-fr.jpeg)
+![Word clock](docs/img/clock-face-fr.jpeg)
 
 * Support the addition of new clock faces (other dimensions, language, layout,...). see `src/clock_face`
 * Compatible with neopixel LED strips
@@ -11,9 +11,9 @@
 
 ## Sample wiring with Pi Pico
 
-![Word clock sample schematic with raspberry pi pico](doc/img/schematic-pi-pico.png)
-![Word clock wiring with raspberry pi pico](doc/img/back.jpeg)
-![Word clock usb socket](doc/img/back-close-up.jpeg)
+![Word clock sample schematic with raspberry pi pico](docs/img/schematic-pi-pico.png)
+![Word clock wiring with raspberry pi pico](docs/img/back.jpeg)
+![Word clock usb socket](docs/img/back-close-up.jpeg)
 
 ## Usage
 
