@@ -3,7 +3,8 @@
 ![Word clock](doc/img/clock-face-fr.jpeg)
 
 * Support the addition of new clock faces (other dimensions, language, layout,...). see `src/clock_face`
-* Compatible with neopixel led strips
+* Compatible with neopixel LED strips
+* Custom designed PCB jumper to easily build the neopixel LED Matrix ([See /hardware/pcb_jumper](pcb_jumper/))
 * Light sensor based luminosity adjustment
 * Create your own animations. see `src/rendering`
 * Asynchronous implementation with asyncio

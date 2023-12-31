@@ -9,7 +9,7 @@
 * Neopixel led strip (eg. SK6812 or ws2814) 60 LED/m, 2.5m (important: not waterproof)
 * USB-C breakout board
 * Optional: XT30 or 60 connector
-* 11 PCB jumper (or use 11*3 small cables)
+* 11 PCB jumper (or use 11*3 small cables) [See /hardware/pcb_jumper](pcb_jumper/)
 * 3mm thick glass panel 30x30cm
 * MDF (3mm) Board to cut all components
 * 4x M6 bolts with cone-shaped head
@@ -30,7 +30,7 @@ Another MDF grid spacer is placed on top (glued) with 4 cone-shaped head m6 scre
 
 The next layer is an MDF LED row spacer.
 
-Then the back plate, with LED taped on it, with the PCB jumpers soldered to recreate a long chain. I ordered 1.6mm thick custom designed PCB jumpers for cheap (from PCBway IIRC). With castelated holes to easily solder them onto the led strips. See [/hardware/pcb_jumper/](pcb_jumper/).
+Then the back plate, with LED taped on it, with the PCB jumpers soldered to recreate a long chain. I ordered 1.6mm thick custom designed PCB jumpers for cheap (from PCBway IIRC). With castelated holes to easily solder them onto the led strips. See [/hardware/pcb_jumper](pcb_jumper/).
 
 ![Wordclock v2 custom designed pcb](/doc/img/build-pcb.jpg)
 ![Wordclock v2 jumper pcb soldering](/doc/img/build-pcb-solder.jpg)
