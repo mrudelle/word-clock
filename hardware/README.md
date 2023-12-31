@@ -30,7 +30,7 @@ Another MDF grid spacer is placed on top (glued) with 4 cone-shaped head m6 scre
 
 The next layer is an MDF LED row spacer.
 
-Then the back plate, with LED taped on it, with the PCB jumpers soldered to recreate a long chain. I ordered 1.6mm thick custom designed PCB jumpers for cheap (from PCBway IIRC). With castelated holes to easily solder them onto the led strips.
+Then the back plate, with LED taped on it, with the PCB jumpers soldered to recreate a long chain. I ordered 1.6mm thick custom designed PCB jumpers for cheap (from PCBway IIRC). With castelated holes to easily solder them onto the led strips. See [/hardware/pcb_jumper/](pcb_jumper/).
 
 ![Wordclock v2 custom designed pcb](/doc/img/build-pcb.jpg)
 ![Wordclock v2 jumper pcb soldering](/doc/img/build-pcb-solder.jpg)

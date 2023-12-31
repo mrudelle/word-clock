@@ -10,7 +10,7 @@
 
 ## Sample wiring with Pi Pico
 
-![Word clock sample schematic with raspberry pi pico](doc/img/schematics-pi-pico.png)
+![Word clock sample schematic with raspberry pi pico](doc/img/schematic-pi-pico.png)
 ![Word clock wiring with raspberry pi pico](doc/img/back.jpeg)
 ![Word clock usb socket](doc/img/back-close-up.jpeg)
 
