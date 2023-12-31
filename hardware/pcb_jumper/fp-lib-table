@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "wordclock_pcb_jumper")(type "KiCad")(uri "${KIPRJMOD}/wordclock_pcb_jumper.pretty")(options "")(descr ""))
+)

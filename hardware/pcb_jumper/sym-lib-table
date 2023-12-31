@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "wordclock_jumper")(type "KiCad")(uri "${KIPRJMOD}/wordclock_jumper.kicad_sym")(options "")(descr ""))
+)
