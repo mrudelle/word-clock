@@ -7,13 +7,13 @@ from src.board.ds3231 import DS3231
 i2c_bus = machine.I2C(1, scl=machine.Pin(27), sda=machine.Pin(26))
 
 #### Set the date here as UTC ####
-year = 2023
-month = 12
-day = 26
+year = 2024
+month = 3
+day = 23
 
-hours = 22
-minutes = 23
-seconds = 25
+hours = 14
+minutes = 47
+seconds = 00
 #### Set the date here as UTC ####
 
 
